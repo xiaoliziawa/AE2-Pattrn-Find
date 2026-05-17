@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.lirxowo.ae2_pattern_find.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "ae2_pattern_find.refmap.json",
+  "mixins": [
+    "PatternAccessTermMenuAccessor",
+    "ContainerTrackerAccessor"
+  ],
+  "client": [
+    "client.AbstractContainerScreenAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

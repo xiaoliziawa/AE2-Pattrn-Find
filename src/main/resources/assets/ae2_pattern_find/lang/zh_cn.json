@@ -1,0 +1,6 @@
+{
+  "message.ae2_pattern_find.unsupported_container": "该样板供应器不支持定位（非标准 AE2 实现）。",
+  "message.ae2_pattern_find.cross_dimension": "该样板位于 %s 维度 (%s, %s, %s)。",
+  "ae2guide.ae2_pattern_find.title": "样板定位器",
+  "ae2guide.ae2_pattern_find.subtitle": "按住 Shift+Alt 即可在世界中标出样板所在的样板供应器位置"
+}

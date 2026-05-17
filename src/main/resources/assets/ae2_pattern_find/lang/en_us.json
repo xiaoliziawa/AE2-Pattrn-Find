@@ -1,0 +1,6 @@
+{
+  "message.ae2_pattern_find.unsupported_container": "This pattern provider does not support locating (non-standard AE2 implementation).",
+  "message.ae2_pattern_find.cross_dimension": "Pattern is in dimension %s at (%s, %s, %s).",
+  "ae2guide.ae2_pattern_find.title": "Pattern Locator",
+  "ae2guide.ae2_pattern_find.subtitle": "Hold Shift+Alt on a pattern slot to mark the pattern provider's location in the world."
+}
