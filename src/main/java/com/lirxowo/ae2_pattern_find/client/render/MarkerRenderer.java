@@ -5,6 +5,7 @@ import com.lirxowo.ae2_pattern_find.client.MarkerStore;
 import com.lirxowo.ae2_pattern_find.client.PatternLocationMarker;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexFormat;
@@ -42,20 +43,17 @@ public final class MarkerRenderer {
         Vec3 camPos = camera.getPosition();
         PoseStack pose = event.getPoseStack();
 
-        int argb = Config.markerColorArgb();
-        float a = ColorUtil.a(argb);
-        float r = ColorUtil.r(argb);
-        float g = ColorUtil.g(argb);
-        float b = ColorUtil.b(argb);
+        ColorUtil.Rgba color = ColorUtil.unpack(Config.markerColorArgb());
 
         var dim = mc.level.dimension();
 
-        drawBoxesThroughWalls(pose, camPos, markers, dim, r, g, b, a);
+        drawBoxesThroughWalls(pose, camPos, markers, dim, color);
 
         if (Config.SHOW_DISTANCE_TEXT.get()) {
+            Font font = mc.font;
             for (PatternLocationMarker m : markers) {
                 if (!m.dimension.equals(dim)) continue;
-                drawLabel(pose, LABEL_BUFFERS, camera, m, camPos);
+                drawLabel(pose, LABEL_BUFFERS, camera, font, m, camPos);
             }
             LABEL_BUFFERS.endBatch();
         }
@@ -64,7 +62,7 @@ public final class MarkerRenderer {
     private static void drawBoxesThroughWalls(PoseStack pose, Vec3 camPos,
                                               List<PatternLocationMarker> markers,
                                               ResourceKey<Level> dim,
-                                              float r, float g, float b, float a) {
+                                              ColorUtil.Rgba color) {
         boolean began = false;
 
         for (PatternLocationMarker m : markers) {
@@ -84,13 +82,14 @@ public final class MarkerRenderer {
 
             pose.pushPose();
             pose.translate(m.pos.getX() - camPos.x, m.pos.getY() - camPos.y, m.pos.getZ() - camPos.z);
-            LevelRenderer.renderLineBox(pose, LINE_BUILDER, 0, 0, 0, 1, 1, 1, r, g, b, a);
+            LevelRenderer.renderLineBox(pose, LINE_BUILDER, 0, 0, 0, 1, 1, 1,
+                    color.r(), color.g(), color.b(), color.a());
             pose.popPose();
         }
 
         if (began) {
             BufferBuilder.RenderedBuffer rendered = LINE_BUILDER.end();
-            com.mojang.blaze3d.vertex.BufferUploader.drawWithShader(rendered);
+            BufferUploader.drawWithShader(rendered);
 
             RenderSystem.enableCull();
             RenderSystem.disableBlend();
@@ -101,10 +100,7 @@ public final class MarkerRenderer {
     }
 
     private static void drawLabel(PoseStack pose, MultiBufferSource buffers, Camera camera,
-                                  PatternLocationMarker marker, Vec3 camPos) {
-        Minecraft mc = Minecraft.getInstance();
-        Font font = mc.font;
-
+                                  Font font, PatternLocationMarker marker, Vec3 camPos) {
         double cx = marker.pos.getX() + 0.5;
         double cy = marker.pos.getY() + 1.4;
         double cz = marker.pos.getZ() + 0.5;
@@ -116,7 +112,7 @@ public final class MarkerRenderer {
 
         Component title = !marker.pattern.isEmpty() ? marker.pattern.getHoverName()
                 : (!marker.icon.isEmpty() ? marker.icon.getHoverName() : Component.literal(""));
-        double dist = Math.sqrt(camera.getPosition().distanceToSqr(cx, cy, cz));
+        double dist = Math.sqrt(camPos.distanceToSqr(cx, cy, cz));
         Component sub = Component.literal(String.format("%.1f m", dist));
 
         float titleW = font.width(title);

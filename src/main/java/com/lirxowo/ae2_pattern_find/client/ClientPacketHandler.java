@@ -7,7 +7,8 @@ import net.minecraft.client.Minecraft;
 public final class ClientPacketHandler {
 
     public static void onLocateResult(LocateResultS2CPacket pkt) {
-        var level = Minecraft.getInstance().level;
+        var mc = Minecraft.getInstance();
+        var level = mc.level;
         if (level == null) return;
 
         long expire = level.getGameTime() + Config.HIGHLIGHT_TICKS.get();
@@ -20,7 +21,6 @@ public final class ClientPacketHandler {
                 pkt.icon(),
                 expire));
 
-        var mc = Minecraft.getInstance();
         if (mc.screen != null) {
             mc.screen.onClose();
         }

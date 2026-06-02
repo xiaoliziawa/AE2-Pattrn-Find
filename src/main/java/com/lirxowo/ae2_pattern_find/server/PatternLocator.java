@@ -56,9 +56,11 @@ public final class PatternLocator {
         }
 
         ItemStack icon = ItemStack.EMPTY;
-        var group = container.getTerminalGroup();
-        if (group != null && group.icon() != null) {
-            icon = group.icon().toStack();
+        if (pattern.isEmpty()) {
+            var group = container.getTerminalGroup();
+            if (group != null && group.icon() != null) {
+                icon = group.icon().toStack();
+            }
         }
 
         var result = new LocateResultS2CPacket(

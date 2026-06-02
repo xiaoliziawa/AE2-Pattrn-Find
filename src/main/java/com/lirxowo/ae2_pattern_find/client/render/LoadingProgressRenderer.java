@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.GameRenderer;
 import org.joml.Matrix4f;
 
 public final class LoadingProgressRenderer {
@@ -19,11 +20,8 @@ public final class LoadingProgressRenderer {
     public static void draw(GuiGraphics graphics, float cx, float cy, float progress) {
         if (progress <= 0f) return;
 
-        int argb = Config.markerColorArgb();
-        float a = ColorUtil.a(argb);
-        float r = ColorUtil.r(argb);
-        float g = ColorUtil.g(argb);
-        float b = ColorUtil.b(argb);
+        ColorUtil.Rgba color = ColorUtil.unpack(Config.markerColorArgb());
+        float r = color.r(), g = color.g(), b = color.b(), a = color.a();
 
         PoseStack pose = graphics.pose();
         pose.pushPose();
@@ -32,7 +30,7 @@ public final class LoadingProgressRenderer {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableCull();
-        RenderSystem.setShader(net.minecraft.client.renderer.GameRenderer::getPositionColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
         Matrix4f m = pose.last().pose();
         Tesselator tess = Tesselator.getInstance();

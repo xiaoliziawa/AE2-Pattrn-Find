@@ -10,6 +10,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -60,11 +61,8 @@ public final class ArrowOverlayRenderer {
         float halfH = (float) Math.tan(fov / 2.0);
         float halfW = halfH * (sw / (float) sh);
 
-        int argb = Config.markerColorArgb();
-        float baseA = ColorUtil.a(argb);
-        float r = ColorUtil.r(argb);
-        float g = ColorUtil.g(argb);
-        float b = ColorUtil.b(argb);
+        ColorUtil.Rgba color = ColorUtil.unpack(Config.markerColorArgb());
+        float r = color.r(), g = color.g(), b = color.b(), baseA = color.a();
 
         var dim = mc.level.dimension();
         PoseStack pose = gfx.pose();
@@ -105,7 +103,7 @@ public final class ArrowOverlayRenderer {
 
             pose.pushPose();
             pose.translate(ax, ay, 0);
-            pose.mulPose(com.mojang.math.Axis.ZP.rotation(angle));
+            pose.mulPose(Axis.ZP.rotation(angle));
 
             Matrix4f m4 = pose.last().pose();
             buf.vertex(m4, -HALF, -HALF, 0f).uv(0f, 0f).color(r, g, b, a).endVertex();

@@ -1,6 +1,9 @@
 package com.lirxowo.ae2_pattern_find;
 
 import com.lirxowo.ae2_pattern_find.client.ClientSetup;
+import com.lirxowo.ae2_pattern_find.client.PatternAccessTermHandler;
+import com.lirxowo.ae2_pattern_find.client.render.ArrowOverlayRenderer;
+import com.lirxowo.ae2_pattern_find.client.render.MarkerRenderer;
 import com.lirxowo.ae2_pattern_find.network.ModNetwork;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -25,10 +28,10 @@ public class AE2PatternFind {
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             modBus.addListener(ClientSetup::onClientSetup);
-            MinecraftForge.EVENT_BUS.register(com.lirxowo.ae2_pattern_find.client.ClientSetup.class);
-            MinecraftForge.EVENT_BUS.register(com.lirxowo.ae2_pattern_find.client.PatternAccessTermHandler.class);
-            MinecraftForge.EVENT_BUS.register(com.lirxowo.ae2_pattern_find.client.render.MarkerRenderer.class);
-            MinecraftForge.EVENT_BUS.register(com.lirxowo.ae2_pattern_find.client.render.ArrowOverlayRenderer.class);
+            MinecraftForge.EVENT_BUS.register(ClientSetup.class);
+            MinecraftForge.EVENT_BUS.register(PatternAccessTermHandler.class);
+            MinecraftForge.EVENT_BUS.register(MarkerRenderer.class);
+            MinecraftForge.EVENT_BUS.register(ArrowOverlayRenderer.class);
         }
     }
 

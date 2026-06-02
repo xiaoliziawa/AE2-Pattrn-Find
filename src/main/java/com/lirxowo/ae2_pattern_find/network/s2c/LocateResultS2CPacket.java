@@ -2,6 +2,7 @@ package com.lirxowo.ae2_pattern_find.network.s2c;
 
 import com.lirxowo.ae2_pattern_find.client.ClientPacketHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -34,7 +35,7 @@ public record LocateResultS2CPacket(
         int slot = buf.readVarInt();
         BlockPos pos = buf.readBlockPos();
         ResourceLocation dimRl = buf.readResourceLocation();
-        ResourceKey<Level> dim = ResourceKey.create(net.minecraft.core.registries.Registries.DIMENSION, dimRl);
+        ResourceKey<Level> dim = ResourceKey.create(Registries.DIMENSION, dimRl);
         ItemStack pattern = buf.readItem();
         ItemStack icon = buf.readItem();
         return new LocateResultS2CPacket(id, slot, pos, dim, pattern, icon);
